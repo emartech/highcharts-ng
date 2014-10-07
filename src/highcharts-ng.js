@@ -204,7 +204,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
                   if (s.visible !== undefined && chartSeries.visible !== s.visible) {
                     chartSeries.setVisible(s.visible, false);
                   }
-                  chartSeries.setData(angular.copy(s.data), false);
+                  if (s.visible) {
+                    chartSeries.setData(angular.copy(s.data), false);
+                  }
                 }
               } else {
                 chart.addSeries(angular.copy(s), false);
