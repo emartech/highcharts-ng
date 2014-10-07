@@ -6,6 +6,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
   /*global angular: false, Highcharts: false */
   angular.module('highcharts-ng', []).factory('highchartsNGUtils', highchartsNGUtils).directive('highchart', [
     'highchartsNGUtils',
+    '$timeout',
     highchart
   ]);
   function highchartsNGUtils() {
@@ -53,7 +54,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
       }
     };
   }
-  function highchart(highchartsNGUtils) {
+  function highchart(highchartsNGUtils, $timeout) {
     // acceptable shared state
     var seriesId = 0;
     var ensureIds = function (series) {
@@ -184,7 +185,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
                   if (s.visible !== undefined && chartSeries.visible !== s.visible) {
                     chartSeries.setVisible(s.visible, false);
                   }
-                  chartSeries.setData(angular.copy(s.data), false);
+                  if (s.visible) {
+                    chartSeries.setData(angular.copy(s.data), false);
+                  }
                 }
               } else {
                 chart.addSeries(angular.copy(s), false);
@@ -306,7 +309,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
         scope.$on('$destroy', function () {
           if (chart) {
             chart.destroy();
-            setTimeout(function () {
+            $timeout(function () {
               element.remove();
             }, 0);
           }
