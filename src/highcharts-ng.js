@@ -199,17 +199,17 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
               var chartSeries = chart.get(s.id);
               if (chartSeries) {
                 if (!angular.equals(prevSeriesOptions[s.id], chartOptionsWithoutEasyOptions(s))) {
-                  chartSeries.update(angular.copy(s), false);
+                  chartSeries.update(s, false);
                 } else {
                   if (s.visible !== undefined && chartSeries.visible !== s.visible) {
                     chartSeries.setVisible(s.visible, false);
                   }
                   if (s.visible) {
-                    chartSeries.setData(angular.copy(s.data), false);
+                    chartSeries.setData(s.data, false);
                   }
                 }
               } else {
-                chart.addSeries(angular.copy(s), false);
+                chart.addSeries(s, false);
               }
               prevSeriesOptions[s.id] = chartOptionsWithoutEasyOptions(s);
             });
