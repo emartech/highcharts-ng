@@ -12,15 +12,20 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
   function highchartsNGUtils() {
     return {
       indexOf: function (arr, find, i) {
-        if (i === undefined)
+        if (i === undefined) {
           i = 0;
-        if (i < 0)
+        }
+        if (i < 0) {
           i += arr.length;
-        if (i < 0)
+        }
+        if (i < 0) {
           i = 0;
-        for (var n = arr.length; i < n; i++)
-          if (i in arr && arr[i] === find)
+        }
+        for (var n = arr.length; i < n; i++) {
+          if (i in arr && arr[i] === find) {
             return i;
+          }
+        }
         return -1;
       },
       prependMethod: function (obj, method, func) {
@@ -180,17 +185,17 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
               var chartSeries = chart.get(s.id);
               if (chartSeries) {
                 if (!angular.equals(prevSeriesOptions[s.id], chartOptionsWithoutEasyOptions(s))) {
-                  chartSeries.update(s, false);
+                  chartSeries.update(angular.copy(s), false);
                 } else {
                   if (s.visible !== undefined && chartSeries.visible !== s.visible) {
                     chartSeries.setVisible(s.visible, false);
                   }
                   if (s.visible) {
-                    chartSeries.setData(s.data, false);
+                    chartSeries.setData(angular.copy(s.data), false);
                   }
                 }
               } else {
-                chart.addSeries(s, false);
+                chart.addSeries(angular.copy(s), false);
               }
               prevSeriesOptions[s.id] = chartOptionsWithoutEasyOptions(s);
             });
@@ -222,8 +227,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
         // chart is maintained by initChart
         var chart = false;
         var initChart = function () {
-          if (chart)
+          if (chart) {
             chart.destroy();
+          }
           prevSeriesOptions = {};
           var config = scope.config || {};
           var mergedOptions = getMergedOptions(scope, element, config);
@@ -273,14 +279,16 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           }
         });
         scope.$watch('config.useHighStocks', function (useHighStocks, oldUseHighStocks) {
-          if (useHighStocks === oldUseHighStocks)
+          if (useHighStocks === oldUseHighStocks) {
             return;
+          }
           initChart();
         });
         angular.forEach(axisNames, function (axisName) {
           scope.$watch('config.' + axisName, function (newAxes, oldAxes) {
-            if (newAxes === oldAxes)
+            if (newAxes === oldAxes) {
               return;
+            }
             if (newAxes) {
               chart[axisName][0].update(newAxes, false);
               updateZoom(chart[axisName][0], angular.copy(newAxes));
@@ -290,15 +298,17 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
         });
         scope.$watch('config.options', function (newOptions, oldOptions, scope) {
           //do nothing when called on registration
-          if (newOptions === oldOptions)
+          if (newOptions === oldOptions) {
             return;
+          }
           initChart();
           processSeries(scope.config.series);
           chart.redraw();
         }, true);
         scope.$watch('config.size', function (newSize, oldSize) {
-          if (newSize === oldSize)
+          if (newSize === oldSize) {
             return;
+          }
           if (newSize) {
             chart.setSize(newSize.width || undefined, newSize.height || undefined);
           }
